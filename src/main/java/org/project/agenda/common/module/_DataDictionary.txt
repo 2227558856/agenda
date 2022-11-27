@@ -1,0 +1,257 @@
+Table: agenda
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ user_id      | BIGINT UNSIGNED(20) | YES  |     |                   | 用户id    
+ year         | INT(10)             | YES  |     |                   | 学年 某一学年 
+ term         | INT(10)             | YES  |     |                   | 学期 某一学期,1-上学期 2-下学期
+ week         | INT(10)             | YES  |     |                   | 周次 参考学校教学周,例如8表示第八周,寒暑假不考虑,因为基本都有空
+ day          | INT(10)             | YES  |     |                   | 周几 表示周几,例如1表示周一
+ name         | VARCHAR(20)         | YES  |     |                   | 日程名称    
+ begin        | VARCHAR(10)         | YES  |     |                   | 起始时间    
+ end          | VARCHAR(10)         | YES  |     |                   | 结束时间    
+ is_remind    | TINYINT UNSIGNED(3) | YES  |     |                   | 是否提醒 1-不提醒 2-提醒
+ remind       | VARCHAR(10)         | YES  |     |                   | 提醒时间 根据起始时间-设定的提醒得到提醒时间,用于到点发邮件提醒
+ way          | TINYINT UNSIGNED(3) | YES  |     |                   | 提醒方式 1-邮件 2-短信 3-企业微信等
+ place        | VARCHAR(20)         | YES  |     |                   | 日程地点 上课开会的地点等
+ organizers   | VARCHAR(10)         | YES  |     |                   | 举办者 例如上课的教师,开会的主持人等
+ information  | VARCHAR(128)        | YES  |     |                   | 备注 一些上课开会的备注消息,例如开会时要带电脑,上课要点名,这节课的任务等等
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: collage
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ name         | VARCHAR(20)         | NO   |     |                   | 学院名称    
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: competition
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ name         | VARCHAR(20)         | NO   |     |                   | 竞赛名称    
+ link         | VARCHAR(128)        | NO   |     |                   | 竞赛链接 竞赛的官网链接,报名链接等
+ information  | VARCHAR(1024)       | NO   |     |                   | 竞赛介绍 可以尝试爬虫获取,也可以手动填写
+ state        | TINYINT UNSIGNED(3) | NO   |     | 0                 | 竞赛状态 0-报名进行中 1-报名已结束
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: enroll
+----------------+---------------------+------+-----+-------------------+---------
+ Field          | Type                | Null | Key | Default           | Remarks 
+----------------+---------------------+------+-----+-------------------+---------
+ id             | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time   | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time   | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted     | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ competition_id | BIGINT UNSIGNED(20) | YES  |     |                   | 竞赛id    
+ user_id        | BIGINT UNSIGNED(20) | YES  |     |                   | 用户id    
+ state          | TINYINT UNSIGNED(3) | YES  |     |                   | 用户状态 1-未组队 2-已组队 3-寻找队友
+----------------+---------------------+------+-----+-------------------+---------
+
+Table: file
+-------------------+---------------------+------+-----+-------------------+---------
+ Field             | Type                | Null | Key | Default           | Remarks 
+-------------------+---------------------+------+-----+-------------------+---------
+ id                | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 自增主键 
+ original_name     | VARCHAR(1024)       | NO   |     |                   | 文件名 文件上传时对应的名称
+ source            | TINYINT UNSIGNED(3) | NO   |     |                   | 文件来源 1-IM 2-其他
+ type              | TINYINT UNSIGNED(3) | NO   |     |                   | 文件类型 1-文本文件 2-图片文件 3-音频文件 4-视频文件 5-其他文件
+ suffix            | VARCHAR(50)         | NO   |     |                   | 文件后缀名 后缀名为jpg/png等，无.
+ saved_path        | VARCHAR(255)        | NO   |     |                   | 文件存储地址 文件在服务器上存储路径
+ url               | VARCHAR(128)        | YES  |     |                   | 文件远程存储路径 如果文件从远程获取，则存在
+ new_name          | VARCHAR(128)        | NO   |     |                   | 文件新名称   
+ text_content_uuid | VARCHAR(32)         | YES  |     |                   | 文件内容 需要存储文件内容时，则将生成的文件存储到文本内容表中，通过uuid关联
+ download_times    | INT(10)             | NO   |     | 0                 | 文件下载次数  
+ uuid              | VARCHAR(32)         | YES  |     |                   | uuid 文件所属对象
+ mime_type         | VARCHAR(128)        | NO   |     |                   | 文件mimeType
+ size              | BIGINT(19)          | NO   |     | 0                 | 文件大小 单位：b
+ extra_params      | VARCHAR(255)        | YES  |     |                   | 额外参数 额外参数，如果是语音文件，则对应时长，图片文件则包括宽和高
+ user_id           | BIGINT UNSIGNED(20) | NO   |     | 0                 | 上传用户    
+ is_deleted        | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ created_time      | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time      | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+-------------------+---------------------+------+-----+-------------------+---------
+
+Table: member
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ team_id      | BIGINT UNSIGNED(20) | NO   |     |                   | 团队id    
+ user_id      | BIGINT UNSIGNED(20) | NO   |     |                   | 用户id    
+ status       | TINYINT UNSIGNED(3) | NO   |     |                   | 用户身份 0-组长 1-组员
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: menu
+----------------+---------------------+------+-----+-------------------+---------
+ Field          | Type                | Null | Key | Default           | Remarks 
+----------------+---------------------+------+-----+-------------------+---------
+ id             | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 自增主键 
+ name           | VARCHAR(50)         | NO   |     |                   | 名称      
+ title          | VARCHAR(128)        | YES  |     |                   | 标题      
+ icon           | VARCHAR(20)         | YES  |     |                   | 图标      
+ parent_id      | BIGINT UNSIGNED(20) | NO   |     | 0                 | 父节点ID 如果存在父节点，则对应父节点id
+ parent_id_list | VARCHAR(128)        | YES  |     |                   | 父节点ID集合 该节点的所有父节点集合，从根节点一直到当前节点的直接父节点，父节点直接以,分隔
+ is_parent      | TINYINT UNSIGNED(3) | NO   |     | 0                 | 当前节点是否为父节点 0-否 1-是
+ level          | TINYINT UNSIGNED(3) | NO   |     | 1                 | 层级 根节点为第一层级
+ order_number   | TINYINT UNSIGNED(3) | YES  |     |                   | 排序值 值越小越靠前
+ path           | VARCHAR(50)         | YES  |     |                   | 页面路径    
+ component_path | VARCHAR(128)        | YES  |     |                   | 组件路径    
+ permission_str | VARCHAR(128)        | YES  |     |                   | 权限标识    
+ redirect_path  | VARCHAR(128)        | YES  |     |                   | 重定向地址 面包屑点击事件
+ type           | TINYINT UNSIGNED(3) | NO   |     |                   | 类型 1-菜单 2-按钮
+ status         | TINYINT UNSIGNED(3) | NO   |     | 1                 | 状态 1-正常 2-禁用
+ is_show        | TINYINT UNSIGNED(3) | NO   |     | 1                 | 是否显示 0-不显示 1-显示
+ always_show    | TINYINT UNSIGNED(3) | YES  |     |                   | 是否一直显示 0-否 1-是
+设置为1，表示菜单会一直在根目录显示
+ no_cache       | TINYINT UNSIGNED(3) | YES  |     |                   | 是否不缓存 0-缓存 1-不缓存
+ keep_alive     | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否缓存 0-不缓存 1-缓存
+ affix          | TINYINT UNSIGNED(3) | YES  |     |                   | 是否固定在标签页 0-否 1-是
+ breadcrumb     | TINYINT UNSIGNED(3) | NO   |     | 1                 | 是否显示面包屑 0-不显示 1-显示
+ active_menu    | VARCHAR(50)         | YES  |     |                   | 激活对应的菜单 如果设置了，则以对应的显示菜单名为准
+ is_deleted     | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ created_time   | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time   | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+----------------+---------------------+------+-----+-------------------+---------
+
+Table: resource
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ name         | VARCHAR(20)         | YES  |     |                   | 资料名称    
+ link         | VARCHAR(128)        | YES  |     |                   | 资料链接 可以是网页资源链接等形式
+ file_id      | BIGINT UNSIGNED(20) | YES  |     |                   | 资料文件 上传的视频等文件id
+ information  | VARCHAR(1024)       | YES  |     |                   | 资料介绍    
+ subset_id    | BIGINT UNSIGNED(20) | YES  |     |                   | 所属分组 资料所属的分组id
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: role
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ name         | VARCHAR(128)        | YES  |     |                   | 角色名称    
+ is_default   | TINYINT UNSIGNED(3) | YES  |     |                   | 是否为注册用户默认角色 1-默认角色2-非默认角色
+ status       | TINYINT UNSIGNED(3) | YES  |     |                   | 角色状态 1-正常 2-禁用
+ remark       | VARCHAR(255)        | YES  |     |                   | 备注      
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: role_menu
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ role_id      | BIGINT UNSIGNED(20) | YES  |     |                   | 角色id    
+ menu_id      | BIGINT UNSIGNED(20) | YES  |     |                   | 菜单id    
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: subset
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ name         | VARCHAR(50)         | YES  |     |                   | 分组名称 为一系列资料创建的分组名称
+ parent_id    | BIGINT UNSIGNED(20) | YES  |     |                   | 父节点id 当前分组的上一级分组id,其中初始无分组页面为树的顶点,id为0
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: team
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ name         | VARCHAR(20)         | YES  |     |                   | 团队名称    
+ information  | VARCHAR(128)        | YES  |     |                   | 团队简介 简短的介绍,方便识别这是哪个团队
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: user
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ account      | VARCHAR(20)         | NO   |     |                   | 账号 普通用户-学号 管理员-自定义账号
+ password     | VARCHAR(128)        | NO   |     |                   | 密码 加密后的密码
+ salt         | VARCHAR(128)        | NO   |     |                   | 加密盐 添加用户时生成
+ name         | VARCHAR(10)         | YES  |     |                   | 姓名 管理员导入
+ no           | VARCHAR(20)         | YES  |     |                   | 学号 管理员导入
+ gender       | TINYINT UNSIGNED(3) | YES  |     |                   | 性别 0-女 1-男
+ collage_id   | BIGINT UNSIGNED(20) | YES  |     |                   | 学院 学院id 
+ classes      | VARCHAR(20)         | YES  |     |                   | 班级 班级名称,由用户直接输入,自行决定
+ email        | VARCHAR(50)         | YES  |     |                   | 邮箱 邮箱,便于发提醒消息
+ file_id      | BIGINT UNSIGNED(20) | YES  |     |                   | 头像 指向file中的一个头像文件
+ mobile       | VARCHAR(20)         | YES  |     |                   | 手机号 手机号,便于联系,也可以发短信提醒
+ information  | VARCHAR(1024)       | YES  |     |                   | 简介 简介信息,供他人查看,便于组队,可以存1000多个汉字
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: user_menu
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 自增主键 
+ user_id      | BIGINT UNSIGNED(20) | NO   |     |                   | 用户ID    
+ menu_id      | BIGINT UNSIGNED(20) | NO   |     |                   | 菜单ID    
+ role_id      | BIGINT UNSIGNED(20) | NO   |     | 0                 | 角色ID 从角色中加入菜单权限时则对应角色ID
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: user_role
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 主键唯一标识
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ user_id      | BIGINT UNSIGNED(20) | YES  |     |                   | 用户id    
+ role_id      | BIGINT UNSIGNED(20) | YES  |     |                   | 角色id    
+--------------+---------------------+------+-----+-------------------+---------
+
+Table: user_session
+--------------+---------------------+------+-----+-------------------+---------
+ Field        | Type                | Null | Key | Default           | Remarks 
+--------------+---------------------+------+-----+-------------------+---------
+ id           | BIGINT UNSIGNED(20) | NO   | PRI |                   | 主键 自增主键 
+ created_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 创建时间 创建时间
+ updated_time | TIMESTAMP(19)       | NO   |     | CURRENT_TIMESTAMP | 更新时间 更新时间
+ is_deleted   | TINYINT UNSIGNED(3) | NO   |     | 0                 | 是否删除 0-未删除 1-已删除
+ user_id      | BIGINT UNSIGNED(20) | NO   |     |                   | 用户ID 对应user表id
+ session_id   | VARCHAR(32)         | NO   |     |                   | sessionID 用于表示session,即token
+ expires_in   | BIGINT(19)          | NO   |     |                   | session有效时间 单位s，0表示永久有效
+ expires_time | BIGINT(19)          | YES  |     |                   | session过期时间 0表示永久有效，否则为session过期时间
+--------------+---------------------+------+-----+-------------------+---------
+
